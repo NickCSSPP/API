@@ -49,6 +49,38 @@ const books = [{
 app.get('/api/books', (req, res)=> {
     res.send(books);
 });
+
+//post
+app.post('/api/books', (req, res)=> {
+    const mybook = {
+        id: books.length + 1,
+        book: req.body.book
+    }
+
+    books.push(mybook);
+    res.send(mybook);
+})
+
+//put
+app.put('/api/books/:id', (req, res)=> {
+    const mybook = books.find(t => t.id === parseInt(req.params.id));
+    if (!mybook) return res.status(404).send('The book with this ID was not found');
+
+    mybook.book = req.body.book;
+    res.send(mybook);
+});
+
+//delete
+app.delete('/api/books/:id', (req, res)=> {
+    const mybook = books.find(t => t.id === parseInt(req.params.id));
+    if (!mybook) return res.status(404).send('The book with this ID was not found');
+
+    const index = books.indexOf(mybook);
+    books.splice(index, 1);
+    res.send(mybook);
+});
+
+
 // Configuration
 const port = process.env.port || 6001;
 app.listen(port,()=> console.log('Listening on port ${port}'));
